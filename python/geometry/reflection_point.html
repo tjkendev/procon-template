@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# website: http://ogp.me/ns/website#">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="UTF-8">
+<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 1.5.8">
+<title>点の線対称 - yaketake08's 実装メモ</title>
+<link rel="stylesheet" href="https://tjkendev.github.io/procon-library/static/stylesheet/github.css">
+<meta name="description" content="reflection across a line 概要 点\((x_0, y_0)\) と 点\((x_1, y_1)\) を通る直線 を対称軸として ある点\((p, q)\) の線対称とする点を...">
+<meta property="og:title" content="点の線対称 - yaketake08's 実装メモ">
+<meta property="og:description" content="点の線対称">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:url" content="https://tjkendev.github.io/procon-library/python/geometry/reflection_point.html">
+<meta property="og:image" content="https://github.com/tjkendev.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:creator" content="@jken_ull">
+<meta name="google-site-verification" content="vnMr3y5llPKrjPUEjJ0t9Q1RF6WzZoiwKjeL2VUyDhM">
+<link rel="stylesheet" href="https://tjkendev.github.io/procon-library/static/stylesheet/custom.css">
+<link rel="canonical" href="https://tjkendev.github.io/procon-library/python/geometry/reflection_point.html">
+</head>
+<body class="article">
+<div id="header">
+<h1>点の線対称</h1>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>reflection across a line</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_概要">概要</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>点\((x_0, y_0)\) と 点\((x_1, y_1)\) を通る直線 を対称軸として ある点\((p, q)\) の線対称とする点を求める。</p>
+</div>
+<div class="paragraph">
+<p>ベクトル \((p - x_0, q - y_0)\) と \((x_1 - x_0, y_1 - y_0)\) の なす角を \(\theta\) とする時、</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\(\displaystyle \left( \begin{array}{c} x_0 \\ y_0 \end{array} \right) + R(2\theta) \left( \begin{array}{c} p - x_0 \\ q - y_0 \end{array} \right)\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>を求める。 (\(R(\theta)\)は\(2 \times 2\)の回転行列)</p>
+</div>
+<div class="paragraph">
+<p>内積、外積から \(\cos \theta\), \(\sin \theta\) を求めた上で \(\cos 2\theta\), \(\sin 2\theta\) を求め、回転行列を計算する。</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_実装">実装</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<button type="button" class="copy-btn" data-clipboard-target=".code-idx-0">Copy to clipboard</button>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs code-idx-0" data-lang="python">def reflection(line, point):
+    x0, y0, x1, y1 = line
+    p, q = point
+    x1 -= x0; y1 -= y0
+    p -= x0; q -= y0
+    cv = p*x1 + q*y1
+    sv = p*y1 - q*x1
+    cv2 = cv**2 - sv**2
+    sv2 = 2*cv*sv
+    dd = (p**2 + q**2)*(x1**2 + y1**2)
+    if dd == 0:
+        return x0 + p, y0 + q
+    return x0 + (cv2 * p - sv2 * q) / dd, y0 + (sv2 * p + cv2 * q) / dd
+
+# example
+print(reflection((0, 2, 2, 1), (0, 0)))
+# =&gt; (1.6, 3.2)</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verified">Verified</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>AOJ: "CGL_1_B: Reflection": <a href="http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=4328710#1">source</a> (Python3, 0.05sec)</p>
+</li>
+<li>
+<p>AOJ: "2596: Points and Lines": <a href="http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=4328717#1">source</a> (Python3, 0.03sec)</p>
+</li>
+<li>
+<p>AOJ: "2569: Putter": <a href="http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=4800156#1">source</a> (Python3, 0.33sec)</p>
+</li>
+<li>
+<p>AOJ: "1171: Laser Beam Reflections": <a href="http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid=4860127#1">source</a> (Python3, 3.51sec)</p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p><a href="../index.html">戻る</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { extensions: ["mhchem.js"] }
+});
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+<script type="text/javascript" src="https://tjkendev.github.io/procon-library/static/js/main.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
+</body>
+</html>
